@@ -8,7 +8,9 @@ app.use(cors());
 app.use(express.json());
 
 // Creating connection
-mongoose.connect("mongodb://localhost:27017/crud?directConnection=true&tls=false");
+mongoose.connect(
+	"mongodb+srv://rahul:rahul123@cluster0.o67h9xy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+);
 
 app.get("/", (req, res) => {
 	UserModel.find({})

@@ -12,26 +12,26 @@ mongoose.connect(
 	"mongodb+srv://rahul:rahul123@cluster0.o67h9xy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
 
-app.get("/", (req, res) => {
-	UserModel.find({})
+app.get("/", async (req, res) => {
+	await UserModel.find({})
 		.then((clients) => res.json(clients))
 		.catch((err) => res.json(err));
 });
 
-app.get("/getClient/:id", (req, res) => {
+app.get("/getClient/:id", async (req, res) => {
 	const id = req.params.id;
 
-	UserModel.findById({ _id: id })
+	await UserModel.findById({ _id: id })
 		.then((users) => res.json(users))
 		.catch((err) => {
 			console.log(err);
 		});
 });
 
-app.get("/updateClient/:id", (req, res) => {
+app.put("/updateClient/:id", async (req, res) => {
 	const id = req.params.id;
 
-	UserModel.findByIdAndUpdate(
+	await UserModel.findByIdAndUpdate(
 		{ id },
 		{
 			firstName: req.body.firstName,
@@ -45,10 +45,21 @@ app.get("/updateClient/:id", (req, res) => {
 		.catch((err) => res.json(err));
 });
 
-app.post("/createUser", (req, res) => {
-	UserModel.create(req.body)
+app.post("/createUser", async (req, res) => {
+	await UserModel.create(req.body)
 		.then((users) => res.json(users))
 		.catch((err) => res.json(err));
+});
+
+app.delete("/delete/:id", async (req, res) => {
+	// get ID off URL
+	const clientId = req.params.id;
+
+	// Delete the record
+	await UserModel.deleteOne({ id: clientId });
+
+	// Respond
+	res.json({ success: "record deleted." });
 });
 
 app.listen(3001, () => {
